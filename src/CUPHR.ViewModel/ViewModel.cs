@@ -1,7 +1,10 @@
 ﻿using CUPHR.ViewModel.Types.Timers;
 using Schlechtums.Core.BaseClasses;
+using Schlechtums.Core.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace CUPHR.ViewModel
 {
@@ -9,10 +12,11 @@ namespace CUPHR.ViewModel
     {
         public ViewModel()
         {
-            this.Timers = new List<TimerBase>
-            {
-                new Eyes202020Timer()
-            };
+            this.Timers = Assembly.GetExecutingAssembly()
+                                  .GetTypes()
+                                  .Where(t => !t.IsAbstract && t.IsType(typeof(TimerBase)))
+                                  .Select(t => Activator.CreateInstance(t) as TimerBase)
+                                  .ToList();
         }
 
         public List<TimerBase> Timers { get; private set; }
