@@ -1,0 +1,29 @@
+﻿<Window x:Class="CUPHR.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CUPHR.View"
+        xmlns:vm="clr-namespace:CUPHR.ViewModel;assembly=CUPHR.ViewModel"
+        mc:Ignorable="d" DataContextChanged="Window_DataContextChanged"
+        WindowStartupLocation="CenterScreen"
+        Title="Computer Use Physical Health Reminder" Height="480" Width="720">
+
+    <Window.DataContext>
+        <vm:ViewModel />
+    </Window.DataContext>
+    
+    <Grid>
+        <Grid>
+            <DataGrid ItemsSource="{Binding Timers}" AutoGenerateColumns="False" HeadersVisibility="Column"
+                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
+                      CanUserResizeRows="False" CanUserReorderColumns="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="Time Remaining" Binding="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" />
+                    <DataGridTextColumn Header="Message" Binding="{Binding ExpirationMessage}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>
