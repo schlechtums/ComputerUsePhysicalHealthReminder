@@ -4,6 +4,7 @@ using Schlechtums.Core.BaseClasses;
 using Schlechtums.Core.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
@@ -18,9 +19,22 @@ namespace CUPHR.ViewModel
         public ViewModel(ITimersProvider timersProvider)
         {
             this.Timers = timersProvider.GetTimers();
+            foreach (var t in this.Timers)
+            {
+                t.PropertyChanged += this.HandleTimerPropertyChanged;
+            }
         }
 
         public List<Timer> Timers { get; private set; }
+        public Timer NextTimerToExpire
+        {
+            get
+            {
+                return this.Timers?
+                           .OrderBy(t => t.TimeRemaining)
+                           .FirstOrDefault();
+            }
+        }
 
         public void StartAllTimers()
         {
@@ -51,5 +65,11 @@ namespace CUPHR.ViewModel
         }
 
         public event Timer.OnElapsedHandler OnTimerElapsed;
+
+        private void HandleTimerPropertyChanged(Object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Timer.TimeRemaining))
+                this.RaisePropertyChanged(nameof(NextTimerToExpire));
+        }
     }
 }

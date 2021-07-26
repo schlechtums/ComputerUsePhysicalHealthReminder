@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CUPHR.View"
         xmlns:vm="clr-namespace:CUPHR.ViewModel;assembly=CUPHR.ViewModel"
         mc:Ignorable="d" DataContextChanged="Window_DataContextChanged"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded"
         Title="Computer Use Physical Health Reminder" Height="480" Width="720">
 
     <Window.DataContext>
