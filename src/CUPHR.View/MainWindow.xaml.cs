@@ -45,6 +45,7 @@ namespace CUPHR.View
         {
             new ToastContentBuilder().AddText($"{sender.Name} elapsed")
                                      .AddText(timerElapsedMessage)
+                                     .SetToastScenario(ToastScenario.Reminder)
                                      .Show();
         }
     }
