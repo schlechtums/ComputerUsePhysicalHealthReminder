@@ -1,4 +1,5 @@
-﻿using CUPHR.ViewModel.Types.Timers;
+﻿using CUPHR.ViewModel.Types;
+using CUPHR.ViewModel.Types.TimerProviders;
 using Schlechtums.Core.BaseClasses;
 using Schlechtums.Core.Common;
 using System;
@@ -11,15 +12,15 @@ namespace CUPHR.ViewModel
     public class ViewModel : ViewModelBase
     {
         public ViewModel()
+            : this(new CsvTimerProvider())
+        { }
+
+        public ViewModel(ITimersProvider timersProvider)
         {
-            this.Timers = Assembly.GetExecutingAssembly()
-                                  .GetTypes()
-                                  .Where(t => !t.IsAbstract && t.IsType(typeof(TimerBase)))
-                                  .Select(t => Activator.CreateInstance(t) as TimerBase)
-                                  .ToList();
+            this.Timers = timersProvider.GetTimers();
         }
 
-        public List<TimerBase> Timers { get; private set; }
+        public List<Timer> Timers { get; private set; }
 
         public void StartAllTimers()
         {
@@ -29,7 +30,7 @@ namespace CUPHR.ViewModel
             }
         }
 
-        public void StartTimer(TimerBase timer)
+        public void StartTimer(Timer timer)
         {
             timer.Start();
             timer.OnElapsed += this.OnTimerElapsed;
@@ -43,12 +44,12 @@ namespace CUPHR.ViewModel
             }
         }
 
-        public void StopTimer(TimerBase timer)
+        public void StopTimer(Timer timer)
         {
             timer.Stop();
             timer.OnElapsed -= this.OnTimerElapsed;
         }
 
-        public event TimerBase.OnElapsedHandler OnTimerElapsed;
+        public event Timer.OnElapsedHandler OnTimerElapsed;
     }
 }

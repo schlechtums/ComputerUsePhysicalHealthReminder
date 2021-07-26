@@ -1,4 +1,4 @@
-﻿using CUPHR.ViewModel.Types.Timers;
+﻿using CUPHR.ViewModel.Types;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
@@ -41,7 +41,7 @@ namespace CUPHR.View
             this._VM.StartAllTimers();
         }
 
-        private void HandleTimerElapsed(TimerBase sender, String timerElapsedMessage)
+        private void HandleTimerElapsed(Timer sender, String timerElapsedMessage)
         {
             new ToastContentBuilder().AddText($"{sender.Name} elapsed")
                                      .AddText(timerElapsedMessage)

@@ -1,32 +1,35 @@
 ﻿using Schlechtums.Core.BaseClasses;
+using Schlechtums.DataAccessLayer;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CUPHR.ViewModel.Types.Timers
+namespace CUPHR.ViewModel.Types
 {
-    public abstract class TimerBase : NotifyPropertyChanged, IDisposable
+    public class Timer : NotifyPropertyChanged, IDisposable
     {
-        public TimerBase()
+        public Timer()
         {
             this.Enabled = true;
         }
 
-        public abstract String Name { get; }
-        public abstract TimeSpan Interval { get; }
-        public abstract String ExpirationMessage { get; }
+        public String Name { get; set; }
+        public virtual TimeSpan Interval { get; set; }
+        public String ExpirationMessage { get; set; }
 
         private DateTime _LastStart;
         private CancellationTokenSource _CTS;
 
-        public delegate void OnElapsedHandler(TimerBase sender, String message);
+        public delegate void OnElapsedHandler(Timer sender, String message);
         public event OnElapsedHandler OnElapsed;
 
+        [DALIgnore]
         public TimeSpan TimeRemaining { get { return this.Interval - (DateTime.Now - this._LastStart); } }
 
         private Boolean _Enabled;
+        [DALIgnore]
         public Boolean Enabled
         {
             get { return this._Enabled; }
