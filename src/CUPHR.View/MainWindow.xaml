@@ -21,7 +21,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Time Remaining" Binding="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" />
-                    <DataGridTextColumn Header="Message" Binding="{Binding ExpirationMessage}" />
+                    <DataGridTextColumn Header="Next Action" Binding="{Binding NextElapsedMessage}" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

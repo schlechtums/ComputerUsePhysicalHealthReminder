@@ -1,7 +1,9 @@
 ﻿using Schlechtums.Core.BaseClasses;
+using Schlechtums.Core.Common;
 using Schlechtums.DataAccessLayer;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,10 +19,28 @@ namespace CUPHR.ViewModel.Types
 
         public String Name { get; set; }
         public virtual TimeSpan Interval { get; set; }
-        public String ExpirationMessage { get; set; }
+        
+        [DALSQLParameterName("ElapsedMessages")]
+        public String ElapsedMessagesCsv
+        {
+            get { return this.ElapsedMessages?.Join("|"); }
+            set { this.ElapsedMessages = value.Split('|').ToList(); }
+        }
+
+        [DALIgnore]
+        public List<String> ElapsedMessages { get; set; }
+
+        public String NextElapsedMessage
+        {
+            get
+            {
+                return this.ElapsedMessages[this._CurrentMessageIteration % this.ElapsedMessages.Count];
+            }
+        }
 
         private DateTime _LastStart;
         private CancellationTokenSource _CTS;
+        private int _CurrentMessageIteration = 0;
 
         public delegate void OnElapsedHandler(Timer sender, String message);
         public event OnElapsedHandler OnElapsed;
@@ -72,9 +92,11 @@ namespace CUPHR.ViewModel.Types
                 {
                     var oe = this.OnElapsed;
                     if (oe != null)
-                        oe(this, this.ExpirationMessage);
+                        oe(this, this.NextElapsedMessage);
 
                     this._LastStart = DateTime.Now;
+                    this._CurrentMessageIteration++;
+                    this.RaisePropertyChanged(nameof(NextElapsedMessage));
                 }
 
                 this.RaisePropertyChanged(nameof(TimeRemaining));
