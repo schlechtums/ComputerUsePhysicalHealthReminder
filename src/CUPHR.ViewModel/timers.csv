@@ -1,3 +1,4 @@
-﻿Name,Interval,ExpirationMessage
+﻿Name,Interval,ElapsedMessages
 Eyes 20-20-20,00:20:00,Focus on something 20 feet away for 20 seconds
 Walking/Stretches,01:00:00,Walk around or do some stretches
+Sit/Stand,01:00:00,Stand|Sit
