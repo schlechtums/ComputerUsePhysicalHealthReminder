@@ -6,13 +6,16 @@
         xmlns:local="clr-namespace:CUPHR.View"
         xmlns:vm="clr-namespace:CUPHR.ViewModel;assembly=CUPHR.ViewModel"
         mc:Ignorable="d" DataContextChanged="Window_DataContextChanged"
+        xmlns:wpf="clr-namespace:Schlechtums.Core.WpfSDK.Controls;assembly=Schlechtums.Core.WpfSDK"
+        xmlns:c="clr-namespace:Schlechtums.Core.WpfSDK.Converters;assembly=Schlechtums.Core.WpfSDK"
         WindowStartupLocation="CenterScreen" Loaded="Window_Loaded"
+        SizeToContent="Width"
         Title="Computer Use Physical Health Reminder" Height="480" Width="720">
 
     <Window.DataContext>
         <vm:ViewModel />
     </Window.DataContext>
-    
+
     <Grid>
         <Grid>
             <DataGrid ItemsSource="{Binding Timers}" AutoGenerateColumns="False" HeadersVisibility="Column"
@@ -22,6 +25,49 @@
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Time Remaining" Binding="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" />
                     <DataGridTextColumn Header="Next Action" Binding="{Binding NextElapsedMessage}" />
+                    <DataGridTemplateColumn Header="Activity Timer">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DataTemplate.Resources>
+                                    <c:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
+                                    <c:InverseBoolToVisibilityConverter x:Key="inverseBoolToVisibilityConverter" />
+                                </DataTemplate.Resources>
+
+                                <Grid Visibility="{Binding HasAction, Converter={StaticResource boolToVisibilityConverter}}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Margin" Value="3,0,0,0" />
+                                            </Style>
+                                            <Style TargetType="{x:Type wpf:ImageButton}">
+                                                <Setter Property="Margin" Value="3,0,0,0" />
+                                                <Setter Property="Width" Value="75" />
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        
+                                        
+                                        <TextBlock Text="{Binding ActionTime, StringFormat={}{0:hh\\:mm\\:ss}}"
+                                                   Visibility="{Binding ActionTimerRunning, Converter={StaticResource inverseBoolToVisibilityConverter}}" />
+                                        
+                                        <TextBlock Text="{Binding ActionTimer.TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}"
+                                                   Visibility="{Binding ActionTimerRunning, Converter={StaticResource boolToVisibilityConverter}}" />
+
+                                        <wpf:ImageButton Text="Start" Image="pack://application:,,,/CUPHR;component/Resources/play.png"
+                                                         Click="Button_ActionTimerStart_Click"
+                                                         IsEnabled="{Binding CanStart}" DataContext="{Binding}" />
+                                        <wpf:ImageButton Text="Skip" Image="pack://application:,,,/CUPHR;component/Resources/pause.png"
+                                                         Click="Button_ActionTimerSkip_Click"
+                                                         Visibility="{Binding ActionTimerRunning, Converter={StaticResource inverseBoolToVisibilityConverter}}"
+                                                         IsEnabled="{Binding CanStart}" DataContext="{Binding}" />
+                                        <wpf:ImageButton Text="Stop" Image="pack://application:,,,/CUPHR;component/Resources/stop.png"
+                                                         Click="Button_ActionTimerSkip_Click"
+                                                         Visibility="{Binding ActionTimerRunning, Converter={StaticResource boolToVisibilityConverter}}"
+                                                         IsEnabled="{Binding CanStop}" DataContext="{Binding}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
