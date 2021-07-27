@@ -24,7 +24,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Time Remaining" Binding="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" />
-                    <DataGridTextColumn Header="Next Action" Binding="{Binding NextElapsedMessage}" />
+                    <DataGridTextColumn Header="Next Activity" Binding="{Binding NextElapsedMessage}" />
                     <DataGridTemplateColumn Header="Activity Timer">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
