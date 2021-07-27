@@ -103,5 +103,11 @@ namespace CUPHR.View
             var t = (sender as FrameworkElement).DataContext as Timer;
             t.SkipActionTimer();
         }
+
+        private void Button_NextTimerAction_Click(object sender, RoutedEventArgs e)
+        {
+            var t = (sender as FrameworkElement).DataContext as Timer;
+            t.AdvanceActivity();
+        }
     }
 }
