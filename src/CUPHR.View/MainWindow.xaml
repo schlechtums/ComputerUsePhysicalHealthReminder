@@ -17,11 +17,15 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <c:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
-        <c:InverseBoolToVisibilityConverter x:Key="inverseBoolToVisibilityConverter" />
+        <ResourceDictionary Source="pack://application:,,,/Schlechtums.Core.WpfSDK;component/Resources.xaml" />
     </Window.Resources>
 
     <Grid>
+        <Grid.Resources>
+            <c:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
+            <c:InverseBoolToVisibilityConverter x:Key="inverseBoolToVisibilityConverter" />
+        </Grid.Resources>
+        
         <Grid>
             <DataGrid ItemsSource="{Binding Timers}" AutoGenerateColumns="False" HeadersVisibility="Column"
                       CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
