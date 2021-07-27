@@ -19,6 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\gnome_go_next.png" />
     <None Remove="Resources\pause.png" />
     <None Remove="Resources\play.png" />
     <None Remove="Resources\stop.png" />
@@ -35,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\gnome_go_next.png" />
     <Resource Include="Resources\pause.png" />
     <Resource Include="Resources\play.png" />
     <Resource Include="Resources\stop.png" />

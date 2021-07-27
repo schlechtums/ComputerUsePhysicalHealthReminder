@@ -130,7 +130,6 @@ namespace CUPHR.ViewModel.Types
 
         private Timer _ActionTimer;
         [DALIgnore]
-
         public Timer ActionTimer
         {
             get { return this._ActionTimer; }
@@ -144,6 +143,9 @@ namespace CUPHR.ViewModel.Types
                 };
             }
         }
+
+        [DALIgnore]
+        public Boolean HasMultipleActivities { get { return this.ElapsedMessages.Count > 1; } }
 
         public void Start()
         {
@@ -179,6 +181,12 @@ namespace CUPHR.ViewModel.Types
             this.ActionTimerEnabled = false;
         }
 
+        public void AdvanceActivity()
+        {
+            this._CurrentMessageIteration++;
+            this.RaisePropertyChanged(nameof(NextElapsedMessage));
+        }
+
         [DALIgnore]
         public Boolean CanStart
         {
@@ -201,8 +209,7 @@ namespace CUPHR.ViewModel.Types
                     this.RaiseOnElapsed(this, this.NextElapsedMessage);
 
                     this._LastStart = DateTime.Now;
-                    this._CurrentMessageIteration++;
-                    this.RaisePropertyChanged(nameof(NextElapsedMessage));
+                    this.AdvanceActivity();
 
                     if (this.HasAction)
                     {
