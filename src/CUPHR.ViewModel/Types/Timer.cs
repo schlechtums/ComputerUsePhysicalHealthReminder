@@ -43,7 +43,7 @@ namespace CUPHR.ViewModel.Types
                 this._ActionTime = value;
 
                 if (value != null)
-                    this.ActionTimer = new Timer($"{this.Name} supplemental action", value.Value, "Good job!");
+                    this.ActionTimer = new Timer($"{this.Name} supplemental activity", value.Value, "Good job!");
             }
         }
 
