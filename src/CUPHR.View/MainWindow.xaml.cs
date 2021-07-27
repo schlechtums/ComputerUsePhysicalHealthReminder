@@ -30,11 +30,13 @@ namespace CUPHR.View
             InitializeComponent();
 
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            this.Title += $" ({version?.Major}.{version?.Minor}.{version?.Build})";
+            this._VersionString = $"{version?.Major}.{ version?.Minor}.{ version?.Build}";
+            this.Title += $" ({this._VersionString})";
             this._OriginalTitle = this.Title;
         }
 
         private ViewModel.ViewModel _VM;
+        private String _VersionString;
         private String _OriginalTitle;
 
         private void Window_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -49,7 +51,8 @@ namespace CUPHR.View
 
         private void HandleTimerElapsed(Timer sender, String timerElapsedMessage)
         {
-            new ToastContentBuilder().AddText($"{sender.Name} elapsed")
+            var header = sender.IsActionTimer ? $"{sender.Name} completed!" : $"{sender.Name} elapsed";
+            new ToastContentBuilder().AddText(header)
                                      .AddText(timerElapsedMessage)
                                      .SetToastScenario(ToastScenario.Reminder)
                                      .Show();
@@ -87,6 +90,18 @@ namespace CUPHR.View
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.TaskbarItemInfo = new TaskbarItemInfo();
+        }
+
+        private void Button_ActionTimerStart_Click(object sender, RoutedEventArgs e)
+        {
+            var t = (sender as FrameworkElement).DataContext as Timer;
+            t.StartActionTimer();
+        }
+
+        private void Button_ActionTimerSkip_Click(object sender, RoutedEventArgs e)
+        {
+            var t = (sender as FrameworkElement).DataContext as Timer;
+            t.SkipActionTimer();
         }
     }
 }
