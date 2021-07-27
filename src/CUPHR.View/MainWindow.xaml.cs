@@ -69,10 +69,10 @@ namespace CUPHR.View
                 
                 TaskbarItemProgressState progressBarState;
                 
-                if (t.TimeRemaining < TimeSpan.FromMinutes(5))
-                    progressBarState = TaskbarItemProgressState.Paused;
-                else if (t.TimeRemaining < TimeSpan.FromMinutes(1))
+                if (t.TimeRemaining < TimeSpan.FromMinutes(1))
                     progressBarState = TaskbarItemProgressState.Error;
+                else if (t.TimeRemaining < TimeSpan.FromMinutes(5))
+                    progressBarState = TaskbarItemProgressState.Paused;
                 else
                     progressBarState = TaskbarItemProgressState.Normal;
                 
