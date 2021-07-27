@@ -66,9 +66,19 @@ namespace CUPHR.View
             this.Dispatcher.Invoke(() =>
             {
                 this.Title = $"{this._OriginalTitle} ({t.Name} - {t.TimeRemaining.ToString(@"hh\:mm\:ss")})";
+                
+                TaskbarItemProgressState progressBarState;
+                
+                if (t.TimeRemaining < TimeSpan.FromMinutes(5))
+                    progressBarState = TaskbarItemProgressState.Paused;
+                else if (t.TimeRemaining < TimeSpan.FromMinutes(1))
+                    progressBarState = TaskbarItemProgressState.Error;
+                else
+                    progressBarState = TaskbarItemProgressState.Normal;
+                
                 this.TaskbarItemInfo = new TaskbarItemInfo
                 {
-                    ProgressState = TaskbarItemProgressState.Normal,
+                    ProgressState = progressBarState,
                     ProgressValue = 1d - ((double)t.TimeRemaining.TotalSeconds / t.Interval.TotalSeconds)
                 };
             });
