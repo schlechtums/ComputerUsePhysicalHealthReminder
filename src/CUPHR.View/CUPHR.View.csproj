@@ -36,10 +36,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\gnome_go_next.png" />
-    <Resource Include="Resources\pause.png" />
-    <Resource Include="Resources\play.png" />
-    <Resource Include="Resources\stop.png" />
+    <Resource Include="Resources\gnome_go_next.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\pause.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\play.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\stop.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

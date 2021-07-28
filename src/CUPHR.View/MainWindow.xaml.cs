@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Shell;
+using Windows.ApplicationModel.Activation;
 
 namespace CUPHR.View
 {
@@ -33,6 +34,18 @@ namespace CUPHR.View
             this._VersionString = $"{version?.Major}.{ version?.Minor}.{ version?.Build}";
             this.Title += $" ({this._VersionString})";
             this._OriginalTitle = this.Title;
+
+            ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
+        }
+
+        private void ToastNotificationManagerCompat_OnActivated(ToastNotificationActivatedEventArgsCompat e)
+        {
+            var argsSplit = e.Argument.Split(',');
+            var t = this._VM.Timers.Single(t => t.Name == argsSplit[0]);
+            if (argsSplit[1] == "StartAction")
+                t.StartActionTimer();
+            else if (argsSplit[1] == "SkipAction")
+                t.SkipActionTimer();
         }
 
         private ViewModel.ViewModel _VM;
@@ -52,10 +65,18 @@ namespace CUPHR.View
         private void HandleTimerElapsed(Timer sender, String timerElapsedMessage)
         {
             var header = sender.IsActionTimer ? $"{sender.Name} completed!" : $"{sender.Name} elapsed";
-            new ToastContentBuilder().AddText(header)
-                                     .AddText(timerElapsedMessage)
-                                     .SetToastScenario(ToastScenario.Reminder)
-                                     .Show();
+            var tcb = new ToastContentBuilder().AddText(header)
+                                               .AddText(timerElapsedMessage)
+                                               .SetToastScenario(ToastScenario.Reminder);
+
+            if (sender.HasAction)
+            {
+                tcb.SetBackgroundActivation()
+                   .AddButton("Start", ToastActivationType.Foreground, $"{sender.Name},StartAction")
+                   .AddButton("Skip", ToastActivationType.Foreground, $"{sender.Name},SkipAction");
+            }
+
+            tcb.Show();
         }
 
         private void HandleViewModelPropertyChanged(Object sender, PropertyChangedEventArgs e)
