@@ -75,7 +75,25 @@ namespace CUPHR.ViewModel.Types
         public event OnElapsedHandler OnElapsed;
 
         [DALIgnore]
-        public TimeSpan TimeRemaining { get { return this.Interval - (DateTime.Now - this._LastStart); } }
+        public TimeSpan TimeRemaining
+        {
+            get
+            {
+                if (this.IsActionTimer)
+                {
+                    //it's an action timer and the buffer period hasn't expired, return the interval so the timer doesn't move
+                    if (this.ActionTimeRemaining > this.Interval)
+                        return this.Interval;
+                    else // it's an action timer and we've passed the buffer period, return the action time remaining to actually count down
+                        return this.ActionTimeRemaining;
+                }
+                else
+                    return this.RawTimeRemaining;
+            }
+        }
+
+        private TimeSpan RawTimeRemaining { get { return this.Interval - (DateTime.Now - this._LastStart); } }
+        private TimeSpan ActionTimeRemaining { get { return this.RawTimeRemaining + TimeSpan.FromSeconds(3); } }
 
         private Boolean _Enabled;
         [DALIgnore]
@@ -204,7 +222,7 @@ namespace CUPHR.ViewModel.Types
         {
             while (this._CTS != null && !this._CTS.IsCancellationRequested)
             {
-                if ((DateTime.Now - this._LastStart) > this.Interval)
+                if (this.TimeRemaining < TimeSpan.FromSeconds(0))
                 {
                     this.RaiseOnElapsed(this, this.NextElapsedMessage);
 
