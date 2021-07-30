@@ -26,12 +26,34 @@
             <c:InverseBoolToVisibilityConverter x:Key="inverseBoolToVisibilityConverter" />
         </Grid.Resources>
         
-        <Grid>
-            <DataGrid ItemsSource="{Binding Timers}" AutoGenerateColumns="False" HeadersVisibility="Column"
+        <Grid Margin="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <wpf:ImageButton Grid.Column="0" Grid.Row="0" Click="Button_RestartAllTimers_Click" Width="90" HorizontalAlignment="Left"
+                             Text="Restart All" Image="pack://application:,,,/CUPHR;component/Resources/arrow_redo.png" />
+
+            <DataGrid Grid.Column="0" Grid.Row="1" Margin="0,3,0,0"
+                      ItemsSource="{Binding Timers}" AutoGenerateColumns="False" HeadersVisibility="Column"
                       CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
                       CanUserResizeRows="False" CanUserReorderColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                    <DataGridTemplateColumn Header="Restart">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Click="Button_RestartTimer_Click">
+                                    <Image Source="Resources/arrow_redo.png" />
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Time Remaining" Binding="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" />
                     <DataGridTemplateColumn Header="Next Activity">
                         <DataGridTemplateColumn.CellTemplate>
@@ -59,11 +81,11 @@
                                                 <Setter Property="Width" Value="75" />
                                             </Style>
                                         </StackPanel.Resources>
-                                        
-                                        
+
+
                                         <TextBlock Text="{Binding ActionTime, StringFormat={}{0:hh\\:mm\\:ss}}"
                                                    Visibility="{Binding ActionTimerRunning, Converter={StaticResource inverseBoolToVisibilityConverter}}" />
-                                        
+
                                         <TextBlock Text="{Binding ActionTimer.TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}"
                                                    Visibility="{Binding ActionTimerRunning, Converter={StaticResource boolToVisibilityConverter}}" />
 

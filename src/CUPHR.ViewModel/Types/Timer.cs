@@ -199,6 +199,12 @@ namespace CUPHR.ViewModel.Types
             get { return this.ActionTimerRunning; }
         }
 
+        public void Restart()
+        {
+            this._LastStart = DateTime.Now;
+            this.RaisePropertyChanged(nameof(TimeRemaining));
+        }
+
 
         private void TimerThread()
         {
