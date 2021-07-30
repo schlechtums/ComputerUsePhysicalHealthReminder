@@ -115,20 +115,32 @@ namespace CUPHR.View
 
         private void Button_ActionTimerStart_Click(object sender, RoutedEventArgs e)
         {
-            var t = (sender as FrameworkElement).DataContext as Timer;
-            t.StartActionTimer();
+            this.GetTimerForButton(sender).StartActionTimer();
         }
 
         private void Button_ActionTimerSkip_Click(object sender, RoutedEventArgs e)
         {
-            var t = (sender as FrameworkElement).DataContext as Timer;
-            t.SkipActionTimer();
+            this.GetTimerForButton(sender).SkipActionTimer();
         }
 
         private void Button_NextTimerAction_Click(object sender, RoutedEventArgs e)
         {
-            var t = (sender as FrameworkElement).DataContext as Timer;
-            t.AdvanceActivity();
+            this.GetTimerForButton(sender).AdvanceActivity();
+        }
+
+        private void Button_RestartTimer_Click(object sender, RoutedEventArgs e)
+        {
+            this._VM.RestartTimer(this.GetTimerForButton(sender));
+        }
+
+        private void Button_RestartAllTimers_Click(object sender, RoutedEventArgs e)
+        {
+            this._VM.RestartAllTimers();
+        }
+
+        private Timer GetTimerForButton(Object sender)
+        {
+            return (sender as FrameworkElement).DataContext as Timer;
         }
     }
 }

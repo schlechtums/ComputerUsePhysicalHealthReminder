@@ -64,6 +64,19 @@ namespace CUPHR.ViewModel
             timer.OnElapsed -= this.OnTimerElapsed;
         }
 
+        public void RestartTimer(Timer timer)
+        {
+            timer.Restart();
+        }
+
+        public void RestartAllTimers()
+        {
+            foreach (var t in this.Timers)
+            {
+                t.Restart();
+            }
+        }
+
         public event Timer.OnElapsedHandler OnTimerElapsed;
 
         private void HandleTimerPropertyChanged(Object sender, PropertyChangedEventArgs e)
