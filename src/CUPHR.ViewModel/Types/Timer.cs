@@ -3,6 +3,7 @@ using Schlechtums.Core.Common;
 using Schlechtums.DataAccessLayer;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -64,6 +65,26 @@ namespace CUPHR.ViewModel.Types
                 return this.ElapsedMessages[this._CurrentMessageIteration % this.ElapsedMessages.Count];
             }
         }
+
+        public String Icon { get; set; }
+        [DALIgnore]
+        public Uri IconUri { get { return new Uri(Path.Combine(Environment.CurrentDirectory, this.Icon)); } }
+        [DALIgnore]
+        public Uri IconUriToast
+        {
+            get
+            {
+                var extension = Path.GetExtension(this.Icon);
+                var toastIcon = this.Icon.EnsureDoesNotEndWith(extension) + $"_toast{extension}";
+                var toastIconFullPath = Path.Combine(Environment.CurrentDirectory, toastIcon);
+                if (File.Exists(toastIconFullPath))
+                    return new Uri(toastIconFullPath);
+                else
+                    return this.IconUri;
+            }
+        }
+        [DALIgnore]
+        public Boolean HasIcon { get { return this.Icon.IsValued(); } }
 
         public Boolean IsActionTimer { get; private set; }
 
