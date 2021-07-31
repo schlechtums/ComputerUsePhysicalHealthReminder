@@ -1,4 +1,4 @@
-﻿Name,Interval,ActionTime,ElapsedMessages
-Eyes 20-20-20,00:20:00,00:00:20,Focus on something 20 feet away for 20 seconds
-Walking/Stretches,01:00:00,00:05:00,Walk around or do some stretches
-Sit/Stand,01:00:00,,Stand|Sit
+﻿Name,Interval,ActionTime,ElapsedMessages,Icon
+Eyes 20-20-20,00:20:00,00:00:20,Focus on something 20 feet away for 20 seconds,TimerResources\eye.png
+Walking/Stretches,01:00:00,00:05:00,Walk around or do some stretches,TimerResources\stretching.png
+Sit/Stand,01:00:00,,Stand|Sit,TimerResources\sitstand.png

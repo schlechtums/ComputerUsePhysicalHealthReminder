@@ -76,6 +76,11 @@ namespace CUPHR.View
                    .AddButton("Skip", ToastActivationType.Foreground, $"{sender.Name},SkipAction");
             }
 
+            if (sender.HasIcon)
+            {
+                tcb.AddAppLogoOverride(sender.IconUriToast);
+            }
+
             tcb.Show();
         }
 
