@@ -12,11 +12,11 @@ Timers can be customized by modifying the file [timers.csv](/src/CUPHR.ViewModel
 | Walking/Stretches | 01:00:00 | 00:05:00   | Walk around or do some stretches               | TimerResources\stretching.png |
 | Sit/Stand         | 01:00:00 |            | Stand\|Sit                                     | TimerResources\sitstand.png   |
 
-* Name - The name of the timer
-* Interval - How often the timer goes off.  Must be in the format HH:mm:ss (two digit hours, minutes, seconds with a colon separating each)
-* Action Time - If the timer should provide a supplemental action, ex. "Focus on something 20 feet away for 20 seconds", then this is the amount of time it should run for.  Same format as the Interval
-* ElapsedMessages - The message(s) to show in the windows notification when the timer runs out.  Multiple alternating messages can be defined by using | as a delimiter
-* Icon - Optionally define an icon to show for the timer.  The icon must be in a path relative to CUPHR.exe.  You can have an alternate icon to show for the windows notification by providing a second icon file whose name ends with \_toast.  Ex: [stretching.png](/src/CUPHR.ViewModel/TimerResources/stretching.png) and [stretching_toast.png](/src/CUPHR.ViewModel/TimerResources/stretching_toast.png)
+* Name - The name of the timer.
+* Interval - How often the timer goes off.  Must be in the format HH:mm:ss (two digit hours, minutes, seconds with a colon separating each).
+* Action Time - If the timer should provide a supplemental action, ex. "Focus on something 20 feet away for 20 seconds", then this is the amount of time it should run for.  Same format as the Interval.
+* ElapsedMessages - The message(s) to show in the windows notification when the timer runs out.  Multiple alternating messages can be defined by using | as a delimiter.  When using alternating messages, a "Next" button will appear for the timer which will allow you to advance through the defined activities.
+* Icon - Optionally define an icon to show for the timer.  The icon must be in a path relative to CUPHR.exe.  You can have an alternate icon to show for the windows notification by providing a second icon file whose name ends with \_toast.  Ex: [stretching.png](/src/CUPHR.ViewModel/TimerResources/stretching.png) and [stretching_toast.png](/src/CUPHR.ViewModel/TimerResources/stretching_toast.png).
 
 
 
