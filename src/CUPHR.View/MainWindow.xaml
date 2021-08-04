@@ -88,14 +88,27 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Time Remaining" Binding="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" />
+                    <DataGridTemplateColumn Header="Time Remaining">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" Margin="3,0,3,0" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Time Expiring">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding NextExpirationTime, StringFormat={}{0:h\\:mm tt}}" Margin="3,0,3,0" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Next Activity">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Margin="3,0,0,0" Text="{Binding NextElapsedMessage}" />
+                                    <TextBlock Margin="3,0,3,0" Text="{Binding NextElapsedMessage}" VerticalAlignment="Center" />
                                     <wpf:ImageButton Text="Next" Image="pack://application:,,,/CUPHR;component/Resources/gnome_go_next.png"
-                                                     Click="Button_NextTimerAction_Click" Width="75" Margin="3,0,0,0"
+                                                     Click="Button_NextTimerAction_Click" Width="75"
                                                      Visibility="{Binding HasMultipleActivities, Converter={StaticResource boolToVisibilityConverter}}" />
                                 </StackPanel>
                             </DataTemplate>
@@ -117,7 +130,7 @@
                                         </StackPanel.Resources>
 
 
-                                        <TextBlock Text="{Binding ActionTime, StringFormat={}{0:hh\\:mm\\:ss}}"
+                                        <TextBlock Text="{Binding ActionTime, StringFormat={}{0:hh\\:mm\\:ss}}" VerticalAlignment="Center"
                                                    Visibility="{Binding ActionTimerRunning, Converter={StaticResource inverseBoolToVisibilityConverter}}" />
 
                                         <TextBlock Text="{Binding ActionTimer.TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}"
