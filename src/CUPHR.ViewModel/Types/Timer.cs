@@ -89,6 +89,15 @@ namespace CUPHR.ViewModel.Types
         public Boolean IsActionTimer { get; private set; }
 
         private DateTime _LastStart;
+        private DateTime LastStart
+        {
+            get { return this._LastStart; }
+            set
+            {
+                this._LastStart = value;
+                this.RaiseOnTickProperties();
+            }
+        }
         private CancellationTokenSource _CTS;
         private int _CurrentMessageIteration = 0;
 
@@ -128,9 +137,9 @@ namespace CUPHR.ViewModel.Types
         }
 
         [DALIgnore]
-        public DateTime NextExpirationTime {  get { return this._LastStart + this.Interval; } }
+        public DateTime NextExpirationTime {  get { return this.LastStart + this.Interval; } }
 
-        private TimeSpan RawTimeRemaining { get { return this.Interval - (DateTime.Now - this._LastStart); } }
+        private TimeSpan RawTimeRemaining { get { return this.Interval - (DateTime.Now - this.LastStart); } }
         private TimeSpan ActionTimeRemaining { get { return this.RawTimeRemaining + TimeSpan.FromSeconds(3); } }
 
         private Boolean _Enabled;
@@ -205,7 +214,7 @@ namespace CUPHR.ViewModel.Types
 
         public void Start()
         {
-            this._LastStart = DateTime.Now;
+            this.LastStart = DateTime.Now;
             this._CTS = new CancellationTokenSource();
             new Task(this.TimerThread, this._CTS.Token).Start();
         }
@@ -257,7 +266,7 @@ namespace CUPHR.ViewModel.Types
 
         public void Restart()
         {
-            this._LastStart = DateTime.Now;
+            this.LastStart = DateTime.Now;
             this.RaiseOnTickProperties();
         }
 
@@ -270,7 +279,7 @@ namespace CUPHR.ViewModel.Types
                 {
                     this.RaiseOnElapsed(this, this.NextElapsedMessage);
 
-                    this._LastStart = DateTime.Now;
+                    this.LastStart = DateTime.Now;
                     this.AdvanceActivity();
 
                     if (this.HasAction)
@@ -288,6 +297,7 @@ namespace CUPHR.ViewModel.Types
         {
             this.RaisePropertyChanged(nameof(TimeRemaining));
             this.RaisePropertyChanged(nameof(ExpirationStatus));
+            this.RaisePropertyChanged(nameof(NextExpirationTime));
         }
 
         private void RaiseOnElapsed(Timer sender, String nextElapsedMessage)

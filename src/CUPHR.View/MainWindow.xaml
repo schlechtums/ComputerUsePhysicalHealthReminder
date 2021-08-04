@@ -49,7 +49,8 @@
                              Text="Restart All" Image="pack://application:,,,/CUPHR;component/Resources/arrow_redo.png" />
 
             <DataGrid Grid.Column="0" Grid.Row="1" Margin="0,3,0,0"
-                      ItemsSource="{Binding Source={StaticResource timersCollectionView}}" AutoGenerateColumns="False" HeadersVisibility="Column"
+                      ItemsSource="{Binding Source={StaticResource timersCollectionView}}"
+                      AutoGenerateColumns="False" HeadersVisibility="Column" CanUserSortColumns="False"
                       CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
                       CanUserResizeRows="False" CanUserReorderColumns="False" IsReadOnly="True">
 
