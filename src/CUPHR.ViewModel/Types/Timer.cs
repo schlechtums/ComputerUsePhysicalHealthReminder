@@ -113,6 +113,20 @@ namespace CUPHR.ViewModel.Types
             }
         }
 
+        [DALIgnore]
+        public TimerStatus ExpirationStatus
+        {
+            get
+            {
+                if (this.TimeRemaining < TimeSpan.FromMinutes(1))
+                    return TimerStatus.Red;
+                else if (this.TimeRemaining < TimeSpan.FromMinutes(5))
+                    return TimerStatus.Yellow;
+                else
+                    return TimerStatus.Green;
+            }
+        }
+
         private TimeSpan RawTimeRemaining { get { return this.Interval - (DateTime.Now - this._LastStart); } }
         private TimeSpan ActionTimeRemaining { get { return this.RawTimeRemaining + TimeSpan.FromSeconds(3); } }
 
@@ -241,7 +255,7 @@ namespace CUPHR.ViewModel.Types
         public void Restart()
         {
             this._LastStart = DateTime.Now;
-            this.RaisePropertyChanged(nameof(TimeRemaining));
+            this.RaiseOnTickProperties();
         }
 
 
@@ -262,9 +276,15 @@ namespace CUPHR.ViewModel.Types
                     }
                 }
 
-                this.RaisePropertyChanged(nameof(TimeRemaining));
+                this.RaiseOnTickProperties();
                 Thread.Sleep(1000);
             }
+        }
+
+        private void RaiseOnTickProperties()
+        {
+            this.RaisePropertyChanged(nameof(TimeRemaining));
+            this.RaisePropertyChanged(nameof(ExpirationStatus));
         }
 
         private void RaiseOnElapsed(Timer sender, String nextElapsedMessage)

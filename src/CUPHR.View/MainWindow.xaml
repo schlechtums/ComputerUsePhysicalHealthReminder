@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CUPHR.View"
+        xmlns:lc="clr-namespace:CUPHR.View.Converters"
         xmlns:vm="clr-namespace:CUPHR.ViewModel;assembly=CUPHR.ViewModel"
         mc:Ignorable="d" DataContextChanged="Window_DataContextChanged"
         xmlns:wpf="clr-namespace:Schlechtums.Core.WpfSDK.Controls;assembly=Schlechtums.Core.WpfSDK"
@@ -24,8 +25,9 @@
         <Grid.Resources>
             <c:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
             <c:InverseBoolToVisibilityConverter x:Key="inverseBoolToVisibilityConverter" />
+            <lc:TimerStatusToColorConverter x:Key="timerStatusToColorConverter" />
         </Grid.Resources>
-        
+
         <Grid Margin="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -43,6 +45,19 @@
                       ItemsSource="{Binding Timers}" AutoGenerateColumns="False" HeadersVisibility="Column"
                       CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
                       CanUserResizeRows="False" CanUserReorderColumns="False" IsReadOnly="True">
+
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Background" Value="{Binding ExpirationStatus, Converter={StaticResource timerStatusToColorConverter}}" />
+                    </Style>
+                </DataGrid.CellStyle>
+
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Name">
                         <DataGridTemplateColumn.CellTemplate>
