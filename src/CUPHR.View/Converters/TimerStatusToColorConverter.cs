@@ -19,7 +19,7 @@ namespace CUPHR.View.Converters
         private Dictionary<TimerStatus, Brush> _StatusColorsByStatus = new Dictionary<TimerStatus, Brush>
         {
             { TimerStatus.Green, Brushes.Green },
-            { TimerStatus.Yellow, Brushes.Yellow },
+            { TimerStatus.Yellow, Brushes.Orange },
             { TimerStatus.Red, Brushes.Red }
         };
 
