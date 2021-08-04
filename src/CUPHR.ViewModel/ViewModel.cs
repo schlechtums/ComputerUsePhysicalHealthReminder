@@ -4,6 +4,7 @@ using Schlechtums.Core.BaseClasses;
 using Schlechtums.Core.Common;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -18,14 +19,14 @@ namespace CUPHR.ViewModel
 
         public ViewModel(ITimersProvider timersProvider)
         {
-            this.Timers = timersProvider.GetTimers();
+            this.Timers = new ObservableCollection<Timer>(timersProvider.GetTimers());
             foreach (var t in this.Timers)
             {
                 t.PropertyChanged += this.HandleTimerPropertyChanged;
             }
         }
 
-        public List<Timer> Timers { get; private set; }
+        public ObservableCollection<Timer> Timers { get; private set; }
         public Timer NextTimerToExpire
         {
             get

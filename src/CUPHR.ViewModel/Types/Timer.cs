@@ -127,6 +127,9 @@ namespace CUPHR.ViewModel.Types
             }
         }
 
+        [DALIgnore]
+        public DateTime NextExpirationTime {  get { return this._LastStart + this.Interval; } }
+
         private TimeSpan RawTimeRemaining { get { return this.Interval - (DateTime.Now - this._LastStart); } }
         private TimeSpan ActionTimeRemaining { get { return this.RawTimeRemaining + TimeSpan.FromSeconds(3); } }
 
