@@ -19,6 +19,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\arrow_redo.png" />
+    <None Remove="Resources\gnome_go_next.png" />
+    <None Remove="Resources\pause.png" />
+    <None Remove="Resources\play.png" />
+    <None Remove="Resources\stop.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.0.2" />
     <PackageReference Include="Schlechtums.Core" Version="1.2.0.80" />
     <PackageReference Include="Schlechtums.Core.WpfSDK" Version="1.2.0.5" />
@@ -26,6 +34,22 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CUPHR.ViewModel\CUPHR.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\arrow_redo.png" />
+    <Resource Include="Resources\gnome_go_next.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\pause.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\play.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\stop.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

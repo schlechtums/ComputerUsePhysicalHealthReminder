@@ -4,24 +4,154 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CUPHR.View"
+        xmlns:lc="clr-namespace:CUPHR.View.Converters"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:vm="clr-namespace:CUPHR.ViewModel;assembly=CUPHR.ViewModel"
         mc:Ignorable="d" DataContextChanged="Window_DataContextChanged"
-        WindowStartupLocation="CenterScreen"
+        xmlns:wpf="clr-namespace:Schlechtums.Core.WpfSDK.Controls;assembly=Schlechtums.Core.WpfSDK"
+        xmlns:c="clr-namespace:Schlechtums.Core.WpfSDK.Converters;assembly=Schlechtums.Core.WpfSDK"
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded"
+        SizeToContent="Width"
         Title="Computer Use Physical Health Reminder" Height="480" Width="720">
 
     <Window.DataContext>
         <vm:ViewModel />
     </Window.DataContext>
-    
+
+    <Window.Resources>
+        <ResourceDictionary Source="pack://application:,,,/Schlechtums.Core.WpfSDK;component/Resources.xaml" />
+    </Window.Resources>
+
     <Grid>
-        <Grid>
-            <DataGrid ItemsSource="{Binding Timers}" AutoGenerateColumns="False" HeadersVisibility="Column"
+        <Grid.Resources>
+            <c:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
+            <c:InverseBoolToVisibilityConverter x:Key="inverseBoolToVisibilityConverter" />
+            <lc:TimerStatusToColorConverter x:Key="timerStatusToColorConverter" />
+            
+            <CollectionViewSource x:Key="timersCollectionView" Source="{Binding Timers}" IsLiveSortingRequested="True">
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="NextExpirationTime" Direction="Ascending"/>
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
+        </Grid.Resources>
+
+        <Grid Margin="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <wpf:ImageButton Grid.Column="0" Grid.Row="0" Click="Button_RestartAllTimers_Click" Width="90" HorizontalAlignment="Left"
+                             Text="Restart All" Image="pack://application:,,,/CUPHR;component/Resources/arrow_redo.png" />
+
+            <DataGrid Grid.Column="0" Grid.Row="1" Margin="0,3,0,0"
+                      ItemsSource="{Binding Source={StaticResource timersCollectionView}}"
+                      AutoGenerateColumns="False" HeadersVisibility="Column" CanUserSortColumns="False"
                       CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
                       CanUserResizeRows="False" CanUserReorderColumns="False" IsReadOnly="True">
+
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Background" Value="{Binding ExpirationStatus, Converter={StaticResource timerStatusToColorConverter}}" />
+                    </Style>
+                </DataGrid.CellStyle>
+
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                    <DataGridTextColumn Header="Time Remaining" Binding="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" />
-                    <DataGridTextColumn Header="Message" Binding="{Binding ExpirationMessage}" />
+                    <DataGridTemplateColumn Header="Name">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding IconUri}" Width="16" Height="16" Margin="3,0,3,0"
+                                       Visibility="{Binding HasIcon, Converter={StaticResource boolToVisibilityConverter}}" />
+
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="3,0,3,0" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Restart">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Click="Button_RestartTimer_Click">
+                                    <Image Source="Resources/arrow_redo.png" />
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Time Remaining">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" Margin="3,0,3,0" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Time Expiring">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding NextExpirationTime, StringFormat={}{0:h\\:mm tt}}" Margin="3,0,3,0" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Next Activity">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="3,0,3,0" Text="{Binding NextElapsedMessage}" VerticalAlignment="Center" />
+                                    <wpf:ImageButton Text="Next" Image="pack://application:,,,/CUPHR;component/Resources/gnome_go_next.png"
+                                                     Click="Button_NextTimerAction_Click" Width="75"
+                                                     Visibility="{Binding HasMultipleActivities, Converter={StaticResource boolToVisibilityConverter}}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Activity Timer">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Visibility="{Binding HasAction, Converter={StaticResource boolToVisibilityConverter}}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Margin" Value="3,0,0,0" />
+                                            </Style>
+                                            <Style TargetType="{x:Type wpf:ImageButton}">
+                                                <Setter Property="Margin" Value="3,0,0,0" />
+                                                <Setter Property="Width" Value="75" />
+                                            </Style>
+                                        </StackPanel.Resources>
+
+
+                                        <TextBlock Text="{Binding ActionTime, StringFormat={}{0:hh\\:mm\\:ss}}" VerticalAlignment="Center"
+                                                   Visibility="{Binding ActionTimerRunning, Converter={StaticResource inverseBoolToVisibilityConverter}}" />
+
+                                        <TextBlock Text="{Binding ActionTimer.TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}"
+                                                   Visibility="{Binding ActionTimerRunning, Converter={StaticResource boolToVisibilityConverter}}" />
+
+                                        <wpf:ImageButton Text="Start" Image="pack://application:,,,/CUPHR;component/Resources/play.png"
+                                                         Click="Button_ActionTimerStart_Click"
+                                                         IsEnabled="{Binding CanStart}" />
+                                        <wpf:ImageButton Text="Skip" Image="pack://application:,,,/CUPHR;component/Resources/pause.png"
+                                                         Click="Button_ActionTimerSkip_Click"
+                                                         Visibility="{Binding ActionTimerRunning, Converter={StaticResource inverseBoolToVisibilityConverter}}"
+                                                         IsEnabled="{Binding CanStart}" />
+                                        <wpf:ImageButton Text="Stop" Image="pack://application:,,,/CUPHR;component/Resources/stop.png"
+                                                         Click="Button_ActionTimerSkip_Click"
+                                                         Visibility="{Binding ActionTimerRunning, Converter={StaticResource boolToVisibilityConverter}}"
+                                                         IsEnabled="{Binding CanStop}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

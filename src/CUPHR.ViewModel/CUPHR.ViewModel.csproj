@@ -15,8 +15,39 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TimerResources\eye.png" />
+    <None Remove="TimerResources\sitstand.png" />
+    <None Remove="TimerResources\sitstand_toast.png" />
+    <None Remove="TimerResources\stretching.png" />
+    <None Remove="TimerResources\stretching_toast.png" />
+    <None Remove="timers.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TimerResources\eye.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TimerResources\sitstand.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TimerResources\sitstand_toast.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TimerResources\stretching.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TimerResources\stretching_toast.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="timers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Schlechtums.Core" Version="1.2.0.80" />
     <PackageReference Include="Schlechtums.Core.WpfSDK" Version="1.2.0.5" />
+    <PackageReference Include="Schlechtums.DataAccessLayer" Version="1.1.0.74" />
   </ItemGroup>
 
 </Project>
