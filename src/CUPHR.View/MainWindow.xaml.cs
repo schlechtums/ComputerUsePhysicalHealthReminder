@@ -30,11 +30,6 @@ namespace CUPHR.View
         {
             InitializeComponent();
 
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            this._VersionString = $"{version?.Major}.{ version?.Minor}.{ version?.Build}";
-            this.Title += $" ({this._VersionString})";
-            this._OriginalTitle = this.Title;
-
             ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
         }
 
@@ -58,6 +53,11 @@ namespace CUPHR.View
             this._VM.OnTimerElapsed += this.HandleTimerElapsed;
 
             this._VM.PropertyChanged += this.HandleViewModelPropertyChanged;
+
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            this._VersionString = $"{version?.Major}.{ version?.Minor}.{ version?.Build}";
+            this.Title += $" v{this._VersionString}";
+            this._OriginalTitle = this.Title;
 
             this._VM.StartAllTimers();
         }
